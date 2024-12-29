@@ -1,19 +1,13 @@
-from selenium.webdriver.common.by import By
-from selenium import webdriver
+from constants import Locators, Urls
 
-from constants import Locators
+class TestDesigner:
 
-class TestDesigner():
+    def test_designer_check_tabs(self, driver):
+        driver.get(Urls.MAIN_PAGE)
 
-    def test_designer_check_tabs(self):
-        driver = webdriver.Chrome()
-        driver.get("https://stellarburgers.nomoreparties.site/")
-
-        locators = [Locators.button_filling, Locators.button_sauce, Locators.button_rolls]
+        locators = [Locators.BUTTON_FILLING, Locators.BUTTON_SAUCE, Locators.BUTTON_ROLLS]
 
         for locator in locators:
-            driver.find_element(by=By.XPATH, value=locator).click()
-            current_class = driver.find_element(by=By.XPATH, value=locator).get_attribute('class')
+            driver.find_element(*locator).click()
+            current_class = driver.find_element(*locator).get_attribute('class')
             assert "tab_tab_type_current" in current_class
-
-        driver.quit()

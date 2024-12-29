@@ -1,19 +1,18 @@
 import pytest
-from selenium.webdriver.common.by import By
-from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from constants import Locators
 
-class TestLogIn():
+from constants import Locators, Urls, Data
+
+class TestLogIn:
 
     @pytest.mark.parametrize(
         "pages, locators",
         [
-            ("https://stellarburgers.nomoreparties.site/", Locators.button_log_in_main_page),
-            ("https://stellarburgers.nomoreparties.site/login", Locators.button_account),
-            ("https://stellarburgers.nomoreparties.site/register", Locators.button_enter_from_page),
-            ("https://stellarburgers.nomoreparties.site/forgot-password", Locators.button_enter_from_page),
+            (Urls.MAIN_PAGE, Locators.BUTTON_LOG_IN_MAIN_PAGE),
+            (Urls.LOGIN_PAGE, Locators.BUTTON_ACCOUNT),
+            (Urls.REG_PAGE, Locators.BUTTON_ENTER_FROM_PAGE),
+            (Urls.FORGOT_PWD_PAGE, Locators.BUTTON_ENTER_FROM_PAGE),
         ],
         ids=(
             "main",
@@ -22,20 +21,18 @@ class TestLogIn():
             "forgot-password",
         ),
     )
-    def test_log_in_from_forgot_pwd_page_p(self, pages, locators):
-        driver = webdriver.Chrome()
+    def test_log_in_from_forgot_pwd_page_p(self, pages, locators, driver):
         driver.get(pages)
 
-        driver.find_element(by=By.XPATH, value=locators).click()
+        driver.find_element(*locators).click()
 
-        driver.find_element(by=By.XPATH, value=Locators.input_email).send_keys("artemkrutov17@gmail.com")
-        driver.find_element(by=By.XPATH, value=Locators.input_pwd).send_keys("testpwd")
-        driver.find_element(by=By.XPATH, value=Locators.button_enter).click()
+        driver.find_element(*Locators.INPUT_EMAIL).send_keys(Data.LOGIN)
+        driver.find_element(*Locators.INPUT_PWD).send_keys(Data.PWD)
+        driver.find_element(*Locators.BUTTON_ENTER).click()
 
         WebDriverWait(driver, timeout=3).until(
             expected_conditions.visibility_of_element_located(
-                (By.XPATH, Locators.button_order)
+                (Locators.BUTTON_ORDER)
             )
         )
 
-        driver.quit()

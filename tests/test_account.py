@@ -1,82 +1,74 @@
 import pytest
-from selenium.webdriver.common.by import By
-from selenium import webdriver
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 
-from constants import Locators
+from constants import Locators, Urls, Data
 
-class TestAccount():
-    def test_account_open_from_main_page(self):
-        driver = webdriver.Chrome()
-        driver.get("https://stellarburgers.nomoreparties.site/")
+class TestAccount:
+    def test_account_open_from_main_page(self, driver):
+        driver.get(Urls.MAIN_PAGE)
 
-        driver.find_element(by=By.XPATH, value=Locators.button_log_in_main_page).click()
-        driver.find_element(by=By.XPATH, value=Locators.input_email).send_keys("artemkrutov17@gmail.com")
-        driver.find_element(by=By.XPATH, value=Locators.input_pwd).send_keys("testpwd")
-        driver.find_element(by=By.XPATH, value=Locators.button_enter).click()
+        driver.find_element(*Locators.BUTTON_LOG_IN_MAIN_PAGE).click()
+        driver.find_element(*Locators.INPUT_EMAIL).send_keys(Data.LOGIN)
+        driver.find_element(*Locators.INPUT_PWD).send_keys(Data.PWD)
+        driver.find_element(*Locators.BUTTON_ENTER).click()
 
-        driver.find_element(by=By.XPATH, value=Locators.button_account).click()
+        driver.find_element(*Locators.BUTTON_ACCOUNT).click()
 
         WebDriverWait(driver, timeout=3).until(
             expected_conditions.visibility_of_element_located(
-                (By.XPATH, Locators.button_profile)
+                (Locators.BUTTON_PROFILE)
             )
         )
 
-        driver.quit()
 
     @pytest.mark.parametrize(
         "buttons",
         (
-            Locators.button_designer,
-            Locators.logo,
+            Locators.BUTTON_DESIGNER,
+            Locators.LOGO,
         ),
         ids=(
             "by_designer",
             "by_logo",
         ),
     )
-    def test_account_redirect_to_main_page(self, buttons):
-        driver = webdriver.Chrome()
-        driver.get("https://stellarburgers.nomoreparties.site/")
+    def test_account_redirect_to_main_page(self, buttons, driver):
+        driver.get(Urls.MAIN_PAGE)
 
-        driver.find_element(by=By.XPATH, value=Locators.button_log_in_main_page).click()
-        driver.find_element(by=By.XPATH, value=Locators.input_email).send_keys("artemkrutov17@gmail.com")
-        driver.find_element(by=By.XPATH, value=Locators.input_pwd).send_keys("testpwd")
-        driver.find_element(by=By.XPATH, value=Locators.button_enter).click()
+        driver.find_element(*Locators.BUTTON_LOG_IN_MAIN_PAGE).click()
+        driver.find_element(*Locators.INPUT_EMAIL).send_keys(Data.LOGIN)
+        driver.find_element(*Locators.INPUT_PWD).send_keys(Data.PWD)
+        driver.find_element(*Locators.BUTTON_ENTER).click()
 
-        driver.find_element(by=By.XPATH, value=Locators.button_account).click()
+        driver.find_element(*Locators.BUTTON_ACCOUNT).click()
 
-        driver.find_element(by=By.XPATH, value=buttons).click()
+        driver.find_element(*buttons).click()
         WebDriverWait(driver, timeout=3).until(
             expected_conditions.visibility_of_element_located(
-                (By.XPATH, Locators.text_make_burger)
+                (Locators.TEXT_MAKE_BURGER)
             )
         )
 
-        driver.quit()
 
-    def test_account_log_out(self):
-        driver = webdriver.Chrome()
-        driver.get("https://stellarburgers.nomoreparties.site/")
+    def test_account_log_out(self, driver):
+        driver.get(Urls.MAIN_PAGE)
 
-        driver.find_element(by=By.XPATH, value=Locators.button_log_in_main_page).click()
-        driver.find_element(by=By.XPATH, value=Locators.input_email).send_keys("artemkrutov17@gmail.com")
-        driver.find_element(by=By.XPATH, value=Locators.input_pwd).send_keys("testpwd")
-        driver.find_element(by=By.XPATH, value=Locators.button_enter).click()
+        driver.find_element(*Locators.BUTTON_LOG_IN_MAIN_PAGE).click()
+        driver.find_element(*Locators.INPUT_EMAIL).send_keys(Data.LOGIN)
+        driver.find_element(*Locators.INPUT_PWD).send_keys(Data.PWD)
+        driver.find_element(*Locators.BUTTON_ENTER).click()
 
-        driver.find_element(by=By.XPATH, value=Locators.button_account).click()
+        driver.find_element(*Locators.BUTTON_ACCOUNT).click()
         WebDriverWait(driver, timeout=3).until(
             expected_conditions.visibility_of_element_located(
-                (By.XPATH, Locators.button_exit)
+                (Locators.BUTTON_EXIT)
             )
         )
-        driver.find_element(by=By.XPATH, value=Locators.button_exit).click()
+        driver.find_element(*Locators.BUTTON_EXIT).click()
         WebDriverWait(driver, timeout=3).until(
             expected_conditions.visibility_of_element_located(
-                (By.XPATH, Locators.button_enter)
+                (Locators.BUTTON_ENTER)
             )
         )
 
-        driver.quit()
